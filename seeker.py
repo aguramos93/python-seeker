@@ -1,18 +1,18 @@
 #!/usr/bin/python3
 import serial, binascii
 
-MOTOR_ON = ('\x3E\x45\x01\x46\x0B\x0B')
-MOTOR_OFF = ('\x3E\x45\x01\x46\x0C\x0C')
-RETURN_HEAD = ('\x3E\x45\x01\x46\x12\x12')
-CENTER_YAW = ('\x3E\x45\x01\x46\x23\x23')
-LOOK_DOWN = ('\x3E\x45\x01\x46\x11\x11')
+MOTOR_ON = [0x3E, 0x45, 0x01, 0x46, 0x0B, 0x0B]
+MOTOR_OFF = [0x3E, 0x45, 0x01, 0x46, 0x0C, 0x0C]
+RETURN_HEAD = [0x3E, 0x45, 0x01, 0x46, 0x12, 0x12]
+CENTER_YAW = [0x3E, 0x45, 0x01, 0x46, 0x23, 0x23]
+LOOK_DOWN = [0x3E, 0x45, 0x01, 0x46, 0x11, 0x11]
 
-HEAD = ('\xFF\x01\x0F\x10')
-CONTROL_MODE = ('\x00\x00\x05') # mode yaw angle ref frame 
-ROLL = ('\x00\x00\x00\x00') # speed + angle
-PITCH = ('\x00\x00\x00\x00')
-YAW = ('\x00\x00\x00\x08') # yaw 45º
-CHECKSUM = ('\x0D')
+HEAD = [0xFF, 0x01, 0x0F, 0x10]
+CONTROL_MODE = [0x00, 0x00, 0x05] # mode yaw angle ref frame 
+ROLL = [0x00, 0x00, 0x00, 0x00] # speed + angle
+PITCH = [0x00, 0x00, 0x00, 0x00]
+YAW = [0x00, 0x00, 0x00, 0x08] # yaw 45º
+CHECKSUM = [0x0D]
 YAW_45 = HEAD + CONTROL_MODE + ROLL + PITCH + YAW + CHECKSUM # FF 01 0F 10 00 00 05 00 00 00 00 00 00 00 00 00 00 00 08 0D
 
 class Seeker():
@@ -32,8 +32,7 @@ class Seeker():
     def send_command(self, command):
         self.command = command
         if type(command) == str:
-            self.ser.write(str.encode(self.commands[command]))
-            print(str.encode(self.commands[command]))
+            self.ser.write(self.commands[command])
             
     def read_serial(self):
         if type(self.command) == list:
